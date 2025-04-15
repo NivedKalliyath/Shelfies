@@ -5,17 +5,23 @@ import {
   Database
 } from 'lucide-react';
 import Sidebar from './components/Sidebar';
+import Dashboard from './pages/Dashboard';
 import Scanning from './pages/Scanning';
+import DatabaseView from './pages/Database';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
 
   const renderContent = () => {
     switch (activeTab) {
+      case 'dashboard':
+        return <Dashboard />;
       case 'scanning':
         return <Scanning />;
+      case 'database':
+        return <DatabaseView />;
       default:
-        return <Scanning />;
+        return <Dashboard />;
     }
   };
 
@@ -25,7 +31,9 @@ export default function App() {
         activeTab={activeTab} 
         setActiveTab={setActiveTab}
         items={[
+          { id: 'dashboard', icon: LayoutDashboard, label: 'Dashboard' },
           { id: 'scanning', icon: Camera, label: 'Scanning' },
+          { id: 'database', icon: Database, label: 'Database' }
         ]} 
       />
       
