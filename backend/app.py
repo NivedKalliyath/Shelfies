@@ -10,7 +10,7 @@ app = Flask(__name__)
 CORS(app)
 
 # Load the YOLOv8 model
-model = YOLO('backend\best.pt', task='detect')
+model = YOLO('./models/best.pt', task='detect')
 
 def preprocess_image(image_data):
     """Decode a base64 image and return a PIL Image in RGB."""
