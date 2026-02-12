@@ -1,16 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { Search } from 'lucide-react';
+import { Search, Loader2 } from 'lucide-react';
 import { getAllProducts, subscribeToProducts } from '../utils/productDatabase';
 
 export default function DatabaseView() {
-  const [products, setProducts] = useState(getAllProducts());
+  const [products, setProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Initial load
+    setProducts(getAllProducts());
+    setLoading(false);
+
+    // Subscribe to updates
     const unsubscribe = subscribeToProducts(() => {
       setProducts(getAllProducts());
     });
+
     return () => unsubscribe();
   }, []);
 
@@ -36,11 +43,24 @@ export default function DatabaseView() {
     return matchesCategory && matchesSearch;
   });
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <Loader2 className="animate-spin h-12 w-12 text-blue-600 mx-auto mb-4" />
+          <p className="text-gray-600">Loading products...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       <header className="text-center">
         <h1 className="text-3xl font-bold text-gray-900">Database</h1>
-        <p className="text-gray-500 mt-2">Browse and manage product inventory</p>
+        <p className="text-gray-500 mt-2">
+          Browse and manage product inventory ({products.length} products)
+        </p>
       </header>
 
       <div className="bg-white rounded-xl shadow-sm p-6">
@@ -78,12 +98,16 @@ export default function DatabaseView() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {filteredProducts.map((product, index) => (
-                <tr key={index} className="hover:bg-gray-50">
+              {filteredProducts.map((product) => (
+                <tr key={product.id} className="hover:bg-gray-50">
                   <td className="py-3 px-4 text-gray-900">{product.name}</td>
                   <td className="py-3 px-4 text-gray-600">{product.category}</td>
                   <td className="py-3 px-4">
-                    <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
+                    <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                      product.count <= 5 
+                        ? 'bg-red-100 text-red-800' 
+                        : 'bg-blue-100 text-blue-800'
+                    }`}>
                       {product.count}
                     </span>
                   </td>
@@ -95,7 +119,10 @@ export default function DatabaseView() {
               {filteredProducts.length === 0 && (
                 <tr>
                   <td colSpan={4} className="py-8 text-center text-gray-500">
-                    No products found for the selected criteria
+                    {products.length === 0 
+                      ? 'No products in database yet. Start scanning!'
+                      : 'No products found matching your criteria'
+                    }
                   </td>
                 </tr>
               )}

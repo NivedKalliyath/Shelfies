@@ -1,0 +1,41 @@
+# Environment variables
+.env
+.env.local
+
+# Database files
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+data/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+.venv/
+ENV/
+*.egg-info/
+.pytest_cache/
+.coverage
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# YOLO model (optional - remove if you want to commit your model)
+#models/best.pt
+
+# Logs
+*.log
+logs/

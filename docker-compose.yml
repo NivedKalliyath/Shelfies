@@ -1,0 +1,24 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./backend/data:/app/data
+      - ./backend/models:/app/models
+    environment:
+      - FLASK_ENV=production
+      - DATABASE_URL=sqlite:////app/data/inventory.db
+      - MODEL_PATH=/app/models/best.pt
+      - CORS_ORIGINS=http://localhost,http://localhost:5173
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: unless-stopped

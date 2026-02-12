@@ -134,3 +134,12 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# Backend specific
+backend/.env
+backend/.env.local
+backend/data/
+backend/*.db
+
+# Model files (uncomment if you want to exclude large model files)
+# backend/models/*.pt
